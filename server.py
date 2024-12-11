@@ -103,6 +103,7 @@ def process_request():
     input_data = request.form.get('input').strip() # if file is uploaded, this is the file name
     file = request.files.get('file')
     source = input_data if selected_tab != 'type-in' else 'type-in'
+    source = source.replace(' ', '_')
     if not check_filename_validity(source):
         return jsonify({"response": ["Invalid source file name."]})
 
