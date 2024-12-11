@@ -8,10 +8,7 @@ import yaml
 import re
 # from celery_config import app
 
-from dotenv import load_dotenv
 from openai import OpenAI
-load_dotenv()
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 # region define constants and classes
 
@@ -119,6 +116,7 @@ def read_pdf(file, params: dict = PARAMS) -> str:
     return '\n\n'.join(text).strip()
 
 def ask_llm(system_prompt: str, user_prompt: str, params: dict = PARAMS) -> Union[str, Exception]:
+    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
     try:
         response = client.chat.completions.create(
             model=PARAMS['model'],

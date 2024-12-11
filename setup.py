@@ -1,6 +1,7 @@
 import os
 import json
 from utils import VISUALIZER_BUILD_DIR
+from dotenv import load_dotenv
 
 def setup_build():
     cmd = f'cd {os.path.dirname(__file__)} && npm install && npm run build'
@@ -93,6 +94,7 @@ def setup_dotenv():
             apikey = file.read().split('=')[1].strip()
         with open(graphragdotenv, 'w') as file:
             file.write(f"GRAPHRAG_API_KEY={apikey}")
+    load_dotenv()
     print("🌈 Succesfully set up .env files!")
 
 def setup():
