@@ -1,22 +1,25 @@
 import os
 import json
-from utils import VISUALIZER_BUILD_DIR
+from utils import VISUALIZER_BUILD_DIR, run_command
 from dotenv import load_dotenv
 
 def setup_build():
     cmd = f'cd {os.path.dirname(__file__)} && npm install && npm run build'
-    if os.system(cmd) != 0:
+    try:
+        run_command(cmd)
+        print("🌈 Successfully built!")
+    except:
         print("❌ Failed to build.")
         exit()
 
 def setup_visualizer():
     # First, clone graphrag-visualizer
     visualizer_url = "https://github.com/noworneverev/graphrag-visualizer.git"
-    visualizer_dir = os.path.join(VISUALIZER_BUILD_DIR, '../')
+    visualizer_dir = os.path.abspath(os.path.join(VISUALIZER_BUILD_DIR, '../'))
     if not os.path.exists(visualizer_dir):
         print("Cloning graphrag-visualizer...")
         try:
-            os.system(f'git clone {visualizer_url} {visualizer_dir}')
+            run_command(f'git clone {visualizer_url} {visualizer_dir}')
             print("🌈 Successfully cloned!")
         except:
             print("❌ Failed to clone graphrag-visualizer.")
@@ -27,7 +30,7 @@ def setup_visualizer():
     # Second, install dependencies for graphrag-visualizer
     print("Installing dependencies for graphrag-visualizer...")
     try:
-        os.system(f'cd {visualizer_dir} && npm install')
+        run_command(f'cd {visualizer_dir} && npm install')
         print("🌈 Successfully installed!")
     except:
         print("❌ Failed to install dependencies for graphrag-visualizer.")
@@ -74,7 +77,7 @@ def setup_visualizer():
         
         # `npm run build` in graphrag-visualizer
         try:
-            os.system(f'cd {visualizer_dir} && npm run build')
+            run_command(f'cd {visualizer_dir} && npm run build')
             print("🌈 Successfully run build for graphrag-visualizer!")
         except:
             print("❌ Failed to run build for graphrag-visualizer.")

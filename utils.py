@@ -14,7 +14,7 @@ from openai import OpenAI
 
 MEMORY_DIR = os.path.join(os.path.dirname(__file__), 'databases', 'memory_files')
 FEEDBACK_PATH = os.path.join(os.path.dirname(__file__), 'databases', 'feedback.txt')
-VISUALIZER_BUILD_DIR = os.path.join(os.path.dirname(__file__), '..', 'graphrag-visualizer/build')
+VISUALIZER_BUILD_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'graphrag-visualizer/build'))
 VISUALIZER_DIR = os.path.join(os.path.dirname(__file__), 'databases', 'visualizer')
 PARAMS = {
     "model": "gpt-3.5-turbo",
@@ -22,6 +22,11 @@ PARAMS = {
 WORD_LIMIT = 2000
 OVERLAP = 100
 
+def run_command(command):
+    res = subprocess.run(shlex.split(command), capture_output=True, text=True)
+    if res.returncode != 0:
+        raise Exception(res.stderr)
+    return res.stdout
 
 def modify_yml(yml_path, modifications):
     with open(yml_path, 'r') as file:
@@ -42,11 +47,11 @@ class Memory:
     def create(self) -> None:
         '''Create a folder for the memory, and prepare all necessary files.'''
         os.makedirs(self.rootpath, exist_ok=True)
-        os.system(f'cp -r {os.path.join(os.path.dirname(__file__), "graphrag_init/{*,.env}")} {self.rootpath}')
+        run_command(f'cp -r {os.path.join(os.path.dirname(__file__), "graphrag_init/{*,.env}")} {self.rootpath}')
     
     def delete(self) -> None:
         '''Delete the memory.'''
-        os.system(f'rm -r {self.rootpath}')
+        run_command(f'rm -r {self.rootpath}')
 
     def configure_focus(self, entity_type: list) -> None:
         yml_path = os.path.join(self.rootpath, 'settings.yaml')
@@ -59,12 +64,12 @@ class Memory:
             f.write(input_data)
         if os.path.exists(os.path.join(self.rootpath, 'output/create_final_documents.parquet')):
             # update the graph
-            os.system(f'graphrag update --root {self.rootpath}')
-            os.system(f'rm -r {os.path.join(self.rootpath, "output")}')
-            os.system(f'mv {os.path.join(self.rootpath, "update_output")} {os.path.join(self.rootpath, "output")}')
+            run_command(f'graphrag update --root {self.rootpath}')
+            run_command(f'rm -r {os.path.join(self.rootpath, "output")}')
+            run_command(f'mv {os.path.join(self.rootpath, "update_output")} {os.path.join(self.rootpath, "output")}')
         else:
             # create the graph
-            os.system(f'graphrag index --root {self.rootpath}')
+            run_command(f'graphrag index --root {self.rootpath}')
         
     def query(self, input_data: str, params=PARAMS):
         '''Query the memory.'''
@@ -88,8 +93,8 @@ class Memory:
         '''Visualize the memory.'''
         user_build_dir = os.path.join(visual_path, 'build')
         if not os.path.exists(user_build_dir):
-            os.system(f'cp -r {VISUALIZER_BUILD_DIR} {visual_path}')
-        os.system(f'cp {os.path.join(self.rootpath, "output/*.parquet")} {os.path.join(user_build_dir, "artifacts/")}')
+            run_command(f'cp -r {VISUALIZER_BUILD_DIR} {visual_path}')
+        run_command(f'cp {os.path.join(self.rootpath, "output/*.parquet")} {os.path.join(user_build_dir, "artifacts/")}')
         # Now visualization is prepared. Just render the page in user_build_dir.
         return
 
