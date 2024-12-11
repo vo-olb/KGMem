@@ -19,7 +19,8 @@ function App() {
     '• For **PDF uploads**, the file will be **summarized** for you to have a quick grasp with a **focus** determined by you. The **knowledge graph** will be extracted similarly, but tailored to your chosen **focus**. This is suitable for long research papers. \n\n' +
     '**🔍 Querying:**\n' +
     '• To search for information, select memory file(s) from the left sidebar, and/or choose **Query LLM 🤖** and/or **Query Internet 🛜**. \n' +
-    '• Set the mode to **❓ Query**, type in your query, and **⬆️ submit** your content. \n\n' +
+    '• Set the mode to **❓ Query**, type in your query, and **⬆️ submit** your content. \n' +
+    '• Query results from each source will be returned separately, and finally a **summary** of all results will also be provided. \n\n' +
     '**🛠️ Manage Memory:**\n' +
     '• You can **add, delete, rename, or visualize** memory files by clicking the **Manage Memory** button in the left sidebar. \n\n' +
     '**⚙️ Settings & Feedback:**\n' +
@@ -42,29 +43,37 @@ function App() {
         model: 'gpt-3.5-turbo',
     });
     const loadingIntervalRef = useRef(null);
+    const patienceTimeoutRef = useRef(null);
 
     const loadingAnimation = (data) => {
         const typelist = `\n\n**Chosen Knowledge Type:** ${knowledgeType}\n**Chosen Entity Type:** ${entityType}`;
         setMessages((prevMessages) => [
             ...prevMessages,
             { type: 'user', text: `**${mode} Mode:** \n\n${data.input}${mode === 'Add' && selectedTab === 'material' ? typelist : ''}` },
-            { type: 'bot', text: 'Loading' }
+            { type: 'bot', text: 'Loading   ' }
         ]);
 
-        let dots = '';
+        let dots = '   ';
+        let patienceMessageShown = false;
         loadingIntervalRef.current = setInterval(() => {
-            dots = dots.length >= 3 ? '' : dots + '.';
+            dots = dots[2] === '.' ? '   ' : '.' + dots.slice(0, 2);
             setMessages((prevMessages) => [
                 ...prevMessages.slice(0, -1),
-                { type: 'bot', text: `Loading${dots}` }
+                { type: 'bot', text: `Loading${dots}${patienceMessageShown ? ' This could take minutes. Thank you for your patience.' : ' '}` }
             ]);
         }, 500);
+
+        patienceTimeoutRef.current = setTimeout(() => {
+            patienceMessageShown = true;
+        }, 6000);
     }
 
     const handleSubmit = (data) => {
         // Add user message to the main window
         clearInterval(loadingIntervalRef.current);
+        clearInterval(patienceTimeoutRef.current);
         loadingIntervalRef.current = null;
+        patienceTimeoutRef.current = null;
         
         setMessages((prevMessages) => [
             ...prevMessages.slice(0, -1),

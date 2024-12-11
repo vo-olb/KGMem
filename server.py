@@ -123,7 +123,7 @@ def process_request():
         except Exception as e:
             return jsonify({"response": [f"An error occurred in configuring setting or summarizing material: {e}"]})
         if summary:
-            response.append(f"Summary of {source}:\n\n{summary}")
+            response.append(f"**Summary of {source}:**\n\n{summary}")
         
         try:
             store_input(input_data, selected_memory_list, user_id, source)
