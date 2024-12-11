@@ -35,14 +35,18 @@ function App() {
     const [memoryFiles, setMemoryFiles] = useState([]);
     const [showMemoryModal, setShowMemoryModal] = useState(false);
     const [mode, setMode] = useState('Add');
+    const [selectedTab, setSelectedTab] = useState('type-in'); // For add mode only
+    const [knowledgeType, setKnowledgeType] = useState('');
+    const [entityType, setEntityType] = useState('');
     const [parameters, setParameters] = useState({
         model: 'gpt-3.5-turbo',
     });
 
     const loadingAnimation = (data) => {
+        const typelist = `\n\n**Chosen Knowledge Type:** ${knowledgeType}\n**Chosen Entity Type:** ${entityType}`;
         setMessages((prevMessages) => [
             ...prevMessages,
-            { type: 'user', text: `**${data.mode} Mode:** \n\n${data.input}` },
+            { type: 'user', text: `**${data.mode} Mode:** \n\n${data.input}${mode === 'Add' && selectedTab === 'material' ? typelist : ''}` },
             { type: 'bot', text: 'Loading...' }
         ]);
     }
@@ -102,7 +106,9 @@ function App() {
                 <div className="content">
                     <MainWindow messages={messages} />
                     <InputArea loading={loadingAnimation} onSubmit={handleSubmit} selectedMemory={selectedMemory}
-                               mode={mode} setMode={setMode} parameters={parameters} />
+                               mode={mode} setMode={setMode} selectedTab={selectedTab} setSelectedTab={setSelectedTab} 
+                               knowledgeType={knowledgeType} setKnowledgeType={setKnowledgeType} entityType={entityType}
+                               setEntityType={setEntityType} parameters={parameters}/>
                 </div>
                 <Sidebar onParameterChange={setParameters} onFeedbackSubmit={handleFeedback} />
             </div>

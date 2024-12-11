@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import ModeSwitch from './ModeSwitch';
 import UploadTabs from './UploadTabs';
 
-function InputArea({ loading, onSubmit, selectedMemory, mode, setMode, parameters }) {
-    const [selectedTab, setSelectedTab] = useState('type-in'); // For add mode only
+function InputArea({ loading, onSubmit, selectedMemory, mode, setMode, 
+                     selectedTab, setSelectedTab, knowledgeType, setKnowledgeType, 
+                     entityType, setEntityType, parameters}) {
     const [input, setInput] = useState('');
     const [file, setFile] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [knowledgeType, setKnowledgeType] = useState('');
-    const [entityType, setEntityType] = useState('');
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
