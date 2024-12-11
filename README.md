@@ -6,22 +6,20 @@ This project is a **Memory Management Assistant** designed to help researchers a
 
 ### Core Functionalities
 - **Add Knowledge**:
-  - Add knowledge through manual input, file upload (TXT/PDF), or raw material processing.
-  - Microsoft’s [GraphRAG](https://github.com/microsoft/graphrag) is used to extract entities and their relationships to construct a knowledge graph.
+  - Add knowledge through manual input, text or pdf file upload.
+  - Microsoft’s [GraphRAG](https://github.com/microsoft/graphrag) is used to extract entities and their relationships to construct a knowledge graph. The focus of entity type or knowledge type can be chosen by user.
 - **Query Knowledge**:
-  - Query stored knowledge using Microsoft’s GraphRAG’s functionality, along with contextual LLM reasoning and optional internet-based queries.
+  - Query stored knowledge using Microsoft’s GraphRAG’s global/drift search methods, along with LLM's own knowledge base querying.
 - **Visualize Knowledge**:
-  - Visualize knowledge graphs using [GraphRAG Visualizer](https://github.com/noworneverev/graphrag-visualizer).
-  - Explore relationships and gain insights through an intuitive interface.
+  - Visualize knowledge graphs using [GraphRAG Visualizer](https://github.com/noworneverev/graphrag-visualizer) to explore relationships and gain insights through an intuitive interface.
 - **Manage Memory**:
-  - Create, delete, rename, and edit memory files with full user control.
-  - Data is stored in GraphRAG-compatible formats for structured knowledge management.
+  - Create and delete separately managed memory data by user. Memory data is stored in GraphRAG-compatible formats (parquet) for structured knowledge management.
 
-### Frontend:
-- An intuitive, responsive interface built with React allows users to add, query, and visualize knowledge seamlessly.
+### Frontend Summary
+- An intuitive, responsive interface built with React allows users to add, query, and visualize knowledge.
 
-### Backend
-- Built with Flask to handle requests, manage data, and integrate with GraphRAG. Supports LLM-based summarization and processing using OpenAI GPT.
+### Backend Summary
+- Built with Flask to handle requests, manage data, and integrate with GraphRAG. Supports LLM-based processing for GraphRAG inputs/results using OpenAI GPT.
 
 ## Setup
 
@@ -31,11 +29,12 @@ This project is a **Memory Management Assistant** designed to help researchers a
 - Git
 
 ### Installation and Setup
-1. Clone the repository or spin it in GitHub Codespaces:
+1. Clone the repository to local:
    ```bash
    git clone https://github.com/vo-olb/KGMem.git
    cd KGMem-main
    ```
+   or spin it in GitHub Codespaces.
 2. Ensure the parent folder of this project is accessible (this is where the `graphrag-visualizer` folder will be cloned and built).
 3. Install required Python packages:
    ```
@@ -49,14 +48,14 @@ This project is a **Memory Management Assistant** designed to help researchers a
    ```
    python server.py
    ```
-   - This command will prepare the project, including running ``npm install``, ``npm run build``, and other necessary setup steps.
+   - This command will prepare the project, including running ``npm install``, ``npm run build``, and other necessary preparation steps.
 
 ### Access
 Once the server is running, open your browser and navigate to:
 ```
 http://127.0.0.1:5000
 ```
-The homepage includes instructions for using the assistant.
+if you are running it at local. The homepage includes instructions for using the assistant.
 
 ## Future Improvements
 
@@ -74,3 +73,6 @@ Contributions are welcome! Please fork the repository and submit a pull request.
 
 ## License
 This project is licensed under the [MIT License](https://mit-license.org/).
+
+## Acknowledgement
+My highest gratitude to my friend, teammate, mentor, and emotional supporter - ChatGPT 4o!
