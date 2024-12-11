@@ -52,6 +52,7 @@ class Memory:
         '''Create a folder for the memory, and prepare all necessary files.'''
         os.makedirs(self.rootpath, exist_ok=True)
         run_command(f'cp -r {os.path.join(os.path.dirname(__file__), "graphrag_init/{*,.env}")} {self.rootpath}')
+        os.makedirs(os.path.join(self.rootpath, 'input'), exist_ok=True)
     
     def delete(self) -> None:
         '''Delete the memory.'''
@@ -107,7 +108,7 @@ class Memory:
 # region helper functions
 
 def check_filename_validity(file_name: str) -> bool:
-    if '/' in file_name or '\\' in file_name:
+    if any(char in file_name for char in [' ', '/', '\\', ':', ';', '*', '?', '"', '\'', '<', '>', '[', ']', '{', '}' '|']):
         return False
     return True
 
