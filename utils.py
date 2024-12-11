@@ -22,11 +22,15 @@ PARAMS = {
 WORD_LIMIT = 2000
 OVERLAP = 100
 
-def run_command(command):
-    res = subprocess.run(shlex.split(command), capture_output=True, text=True)
-    if res.returncode != 0:
-        raise Exception(res.stderr)
-    return res.stdout
+def run_command(command, return_output=False):
+    if return_output:
+        res = subprocess.run(shlex.split(command), capture_output=True, text=True)
+        if res.returncode != 0:
+            raise Exception(res.stderr)
+        return res.stdout
+    else:
+        if os.system(command) != 0:
+            raise Exception(f"Failed to run command: {command}")
 
 def modify_yml(yml_path, modifications):
     with open(yml_path, 'r') as file:
@@ -82,7 +86,7 @@ class Memory:
                          f"query: {input_data}", params=params)
         method = 'global' if 'global' in method.lower() else 'drift'
         command = f'graphrag query --root {self.rootpath} --query "{input_data}" --method {method}'
-        raw_output = subprocess.run(shlex.split(command), capture_output=True, text=True).stdout
+        raw_output = run_command(command, return_output=True)
         cleaned_output = re.split(r"^SUCCESS:.*", raw_output, maxsplit=1, flags=re.MULTILINE)
         if len(cleaned_output) > 1:
             return cleaned_output[1].strip()
