@@ -7,6 +7,8 @@ function InputArea({ loading, onSubmit, selectedMemory, mode, setMode, parameter
     const [input, setInput] = useState('');
     const [file, setFile] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [knowledgeType, setKnowledgeType] = useState('');
+    const [entityType, setEntityType] = useState('');
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -24,6 +26,8 @@ function InputArea({ loading, onSubmit, selectedMemory, mode, setMode, parameter
         formData.append('mode', mode);
         formData.append('selectedTab', selectedTab);
         formData.append('parameters', JSON.stringify(parameters));
+        formData.append('knowledgeType', knowledgeType);
+        formData.append('entityType', entityType);
         
         if (selectedMemory.length > 0) {
             formData.append('selectedMemory', selectedMemory);
@@ -67,6 +71,8 @@ function InputArea({ loading, onSubmit, selectedMemory, mode, setMode, parameter
         }
         setInput('');
         setFile(null);
+        setKnowledgeType('');
+        setEntityType('');
     };
 
     return (
@@ -98,6 +104,26 @@ function InputArea({ loading, onSubmit, selectedMemory, mode, setMode, parameter
                     )}
                     <button onClick={handleSubmit} className="upload-button" disabled={isSubmitting}>⬆</button>
                 </div>
+                {mode === 'Add' && selectedTab === 'material' && (
+                    <div className="type-inputs">
+                        <input
+                            type="text"
+                            value={knowledgeType}
+                            onChange={(e) => setKnowledgeType(e.target.value)}
+                            placeholder="Enter knowledge type(s), comma-separated"
+                            list="knowledge-history"
+                            className="type-input"
+                        />
+                        <input
+                            type="text"
+                            value={entityType}
+                            onChange={(e) => setEntityType(e.target.value)}
+                            placeholder="Enter entity type(s), comma-separated"
+                            list="entity-history"
+                            className="type-input"
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

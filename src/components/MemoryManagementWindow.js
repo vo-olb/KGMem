@@ -4,15 +4,13 @@ function MemoryManagementWindow({ memoryFiles, setMemoryFiles, onClose }) {
     const [newFileName, setNewFileName] = useState('');
     const [renameTarget, setRenameTarget] = useState();
     const [renameValue, setRenameValue] = useState('');
-    const [editTarget, setEditTarget] = useState();
-    const [editContent, setEditContent] = useState('');
 
     const checkFileName = (fileName) => { // Adjust as needed
         if (!fileName) {
             alert('Invalid file name (empty).');
             return false;
         }
-        if (fileName.includes(',')) {
+        if (fileName.includes(',')) { // TODO: Add more checks as needed, such as /, \, etc.
             alert("Invalid file name (containing comma).")
             return false;
         }
@@ -78,41 +76,25 @@ function MemoryManagementWindow({ memoryFiles, setMemoryFiles, onClose }) {
         }
     };
 
-    const onEdit = async (fileName) => {
+    const onVisual = async (fileName) => {
         try {
-            const response = await fetch(`/memory/edit?user_id=default_user&file_name=${fileName}`);
-            if (response.ok) {
-                const res = await response.json();
-                setEditTarget(fileName);
-                setEditContent(res.content);
-            } else {
-                const res = await response.json();
-                alert(res.error);
-            }
-        } catch (error) {
-            console.error('Error editing memory:', error);
-        }
-    };
-
-    const onSaveEdit = async () => {
-        try {
-            const response = await fetch('/memory/edit?user_id=default_user', {
-                method: 'PATCH',
+            const response = await fetch('/visual?user_id=default_user', {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
-                body: JSON.stringify({ file_name: editTarget, content: editContent }),
+                body: JSON.stringify({ fileName }),
             });
-            if (response.ok) {
-                alert('Memory saved.');
-                setEditTarget('');
-                setEditContent('');
-            } else {
+            if (!response.ok) {
                 const res = await response.json();
                 alert(res.error);
+            } else {
+                const url = '/visualizer/' + 'default_user' + '/build/index.html';
+                window.location.href = url;
             }
         } catch (error) {
-            console.error('Error saving memory:', error);
+            console.error('Error visualizing memory:', error);
         }
-    };
+    }
+        
 
     return (
         <div className="modal">
@@ -159,33 +141,16 @@ function MemoryManagementWindow({ memoryFiles, setMemoryFiles, onClose }) {
                                     </>) : (
                                         <button onClick={() => setRenameTarget(file)}>Rename</button>
                                 )}
-                                <button onClick={() => onEdit(file)}>Edit</button>
+                                <button onClick={() => onVisual(file)}>Visualize</button>
                             </li>
                         ))}
                     </ul>
                 </div>
-                {/* Edit Memory */}
-                {editTarget && (
-                    <div>
-                        <h5>Edit Memory: {editTarget}</h5>
-                        <textarea
-                            value={editContent}
-                            onChange={(e) => setEditContent(e.target.value)}
-                            rows="10"
-                            cols="40"
-                        />
-                        <br />
-                        <button onClick={onSaveEdit}>Save</button>
-                        <button onClick={() => { setEditTarget(''); setEditContent(''); }}>Cancel</button>
-                    </div>
-                )}
                 <button
                     onClick={() => {
                         setNewFileName('');
                         setRenameTarget('');
                         setRenameValue('');
-                        setEditTarget('');
-                        setEditContent('');
                         onClose();
                     }}
                     className="close-button"

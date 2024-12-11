@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function MainWindow({ messages }) {
     const bottomRef = useRef(null);
@@ -11,8 +12,10 @@ function MainWindow({ messages }) {
     return (
         <div className="main-window">
             {messages.map((message, index) => (
-                <div key={index} className={`message ${message.type}`}>
-                    <span>{message.text}</span>
+                <div key={index} className={`message ${message.type} markdown-content`}>
+                    <ReactMarkdown>
+                        {message.text}
+                    </ReactMarkdown>
                 </div>
             ))}
             <div ref={bottomRef}></div>

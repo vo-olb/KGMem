@@ -7,32 +7,42 @@ import MemoryManagementWindow from './components/MemoryManagementWindow';
 import Sidebar from './components/Sidebar';
 
 function App() {
-    const test_msgs = [
-        { type: 'bot', text: 'Welcome to the chatbot!\n\n' +
-                             'If you want to note down something, choose a memory file from the left sidebar, set the mode as Add, and then upload.\n' +
-                             'There are three upload types: type-in, upload text file, and upload pdf material. In the first two types, knowledge points will be extracted and stored in the memory file. ' +
-                             'In the third type, the file will be first summarized and then knowledge points will be processed likewise. Of course you can manually edit the memory file if you are not satisfied (see below).\n\n' +
-                             'If you want to query something, select memory file(s) from the left sidebar and/or `Query LLM` and/or `Query Internet, set the mode as Query, and then type in your query.\n\n' +
-                             'You can also manage memory files (add, delete, rename, edit) by clicking the `Manage Memory` button in the left sidebar.\n\n' +
-                             'In the right sidebar, you can set parameters for the chatbot and provide feedback.\n\n' +
-                             'Enjoy it 😊 Please contact us if you meet any problems.'
-         }
+    const instructions = 
+    '## Welcome to the Chatbot!\n' +
+    '**📝 Note-Taking:**\n' +
+    '• To record something, choose memory file(s) from the left sidebar, set the mode to ➕ **Add**, and ⬆️ **submit** your content. \n' +
+    '• There are three upload types:\n' +
+    '&emsp;1️⃣ **Type-In:** Enter your text manually. \n'+
+    '&emsp;2️⃣ **Text File:** Upload a .txt file. \n' +
+    '&emsp;3️⃣ **PDF File:** Upload a .pdf file. \n' +
+    '• For **type-in** and **text file** uploads, [GraphRAG](https://microsoft.github.io/graphrag/#solution-accelerator) will extract all possible entities and relationships to construct a **knowledge graph**. This is suitable for short inputs such as your notes from lectures, meetings, or experiments.\n' +
+    '• For **PDF uploads**, the file will be **summarized** for you to have a quick grasp with a **focus** determined by you. The **knowledge graph** will be extracted similarly, but tailored to your chosen **focus**. This is suitable for long research papers. \n\n' +
+    '**🔍 Querying:**\n' +
+    '• To search for information, select memory file(s) from the left sidebar, and/or choose **Query LLM 🤖** and/or **Query Internet 🛜**. \n' +
+    '• Set the mode to **❓ Query**, type in your query, and **⬆️ submit** your content. \n\n' +
+    '**🛠️ Manage Memory:**\n' +
+    '• You can **add, delete, rename, or visualize** memory files by clicking the **Manage Memory** button in the left sidebar. \n\n' +
+    '**⚙️ Settings & Feedback:**\n' +
+    '• Use the right sidebar to set chatbot parameters and provide feedback 🙋. \n\n' +
+    '**✨ Try it out!**\n' +
+    'If you encounter any issues, please contact us for assistance.'
+
+    const welcome_msg = [
+        { type: 'bot', text: instructions}
     ];
-    const [messages, setMessages] = useState(test_msgs);
+    const [messages, setMessages] = useState(welcome_msg);
     const [selectedMemory, setSelectedMemory] = useState([]);
     const [memoryFiles, setMemoryFiles] = useState([]);
     const [showMemoryModal, setShowMemoryModal] = useState(false);
     const [mode, setMode] = useState('Add');
     const [parameters, setParameters] = useState({
         model: 'gpt-3.5-turbo',
-        context_size: 100,
-        pdf_max_pages: 10,
     });
 
     const loadingAnimation = (data) => {
         setMessages((prevMessages) => [
             ...prevMessages,
-            { type: 'user', text: `${data.mode} Mode: \n\n${data.input}` },
+            { type: 'user', text: `**${data.mode} Mode:** \n\n${data.input}` },
             { type: 'bot', text: 'Loading...' }
         ]);
     }
@@ -41,7 +51,7 @@ function App() {
         // Add user message to the main window
         setMessages((prevMessages) => [
             ...prevMessages.slice(0, -1),
-            { type: 'bot', text: `${data.res}` }
+            ...data.res.map((text) => ({ type: 'bot', text })),
         ]);
     };
 

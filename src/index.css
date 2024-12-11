@@ -224,6 +224,28 @@ header {
     right: 0;
 }
 
+.rightsidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.github-link {
+    top: 10px;
+    right: 10px;
+}
+
+.github-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.github-icon:hover {
+    transform: scale(1.1);
+}
+
 .rightsidebar .parameter {
     margin-bottom: 6px;
     font-size: 12px;
@@ -247,7 +269,7 @@ header {
 }
 
 .rightsidebar textarea {
-    height: 100px;
+    height: 200px;
 }
 
 .rightsidebar button {
@@ -288,6 +310,17 @@ header {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.markdown-content p {
+    margin: 0; /* 去掉段落间距 */
+    line-height: 1.5; /* 调整行高 */
+  }
+  
+  .markdown-content {
+    font-family: Arial, sans-serif; /* 可选：调整字体 */
+    font-size: 14px; /* 可选：调整字体大小 */
+    white-space: pre-wrap; /* 确保 Markdown 的换行能被正确显示 */
+  }
+
 .input-area {
     display: flex;
     align-items: center;
@@ -299,6 +332,21 @@ header {
     padding: 10px;
     border-top: 1px solid #ccc;
     background-color: #f9f9f9;
+}
+
+.type-inputs {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+    gap: 10px;
+}
+
+.type-input {
+    flex: 1;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* font-size: 14px; */
 }
 
 .message {
