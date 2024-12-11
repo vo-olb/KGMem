@@ -21,7 +21,7 @@ def get_memory_files():
         return jsonify({"error": "Invalid user ID."}), 400
     user_dir = os.path.join(MEMORY_DIR, user_id)
     os.makedirs(user_dir, exist_ok=True)
-    files = [fn for fn in os.listdir(user_dir)]
+    files = [fn for fn in os.listdir(user_dir) if fn[0] != '.']
     return jsonify({"files": files})
 
 @app.route('/memory', methods=['POST'])

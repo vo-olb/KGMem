@@ -54,7 +54,7 @@ function InputArea({ loading, onSubmit, selectedMemory, mode, setMode,
             return;
         }
 
-        loading({ mode, input });
+        loading({ input });
 
         try {
             const response = await fetch('/process_request?user_id=default_user', {

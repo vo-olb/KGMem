@@ -30,7 +30,7 @@ This project is a **Memory Management Assistant** designed to help researchers a
 - Node.js and npm
 - Git
 
-### Installation
+### Installation and Setup
 1. Clone the repository or spin it in GitHub Codespaces:
    ```bash
    git clone https://github.com/vo-olb/KGMem.git
@@ -41,7 +41,11 @@ This project is a **Memory Management Assistant** designed to help researchers a
    ```
    pip install -r requirements.txt
    ```
-4. Start the server:
+4. Create a `.env` file in the folder of the project, and add [OpenAI API Key](https://platform.openai.com/api-keys) into it:
+   ```
+   OPENAI_API_KEY="..."
+   ```
+5. Start the server:
    ```
    python server.py
    ```
@@ -62,7 +66,7 @@ The homepage includes instructions for using the assistant.
 - Enhance multi-user support with Redis for caching and task queues.
 
 ### Optimization:
-- Optimize GraphRAG calling parameters for quicker responses.
+- Optimize GraphRAG calling parameters for quicker responses and more reasonable graph construction (e.g., avoid separate entities for synonyms).
 - Support asynchronous task handling with tools like Celery and Redis.
 
 ## Contributions

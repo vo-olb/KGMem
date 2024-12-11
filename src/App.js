@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from './components/Header';
 import MainWindow from './components/MainWindow';
 import InputArea from './components/InputArea';
@@ -41,18 +41,31 @@ function App() {
     const [parameters, setParameters] = useState({
         model: 'gpt-3.5-turbo',
     });
+    const loadingIntervalRef = useRef(null);
 
     const loadingAnimation = (data) => {
         const typelist = `\n\n**Chosen Knowledge Type:** ${knowledgeType}\n**Chosen Entity Type:** ${entityType}`;
         setMessages((prevMessages) => [
             ...prevMessages,
-            { type: 'user', text: `**${data.mode} Mode:** \n\n${data.input}${mode === 'Add' && selectedTab === 'material' ? typelist : ''}` },
-            { type: 'bot', text: 'Loading...' }
+            { type: 'user', text: `**${mode} Mode:** \n\n${data.input}${mode === 'Add' && selectedTab === 'material' ? typelist : ''}` },
+            { type: 'bot', text: 'Loading' }
         ]);
+
+        let dots = '';
+        loadingIntervalRef.current = setInterval(() => {
+            dots = dots.length >= 3 ? '' : dots + '.';
+            setMessages((prevMessages) => [
+                ...prevMessages.slice(0, -1),
+                { type: 'bot', text: `Loading${dots}` }
+            ]);
+        }, 500);
     }
 
     const handleSubmit = (data) => {
         // Add user message to the main window
+        clearInterval(loadingIntervalRef.current);
+        loadingIntervalRef.current = null;
+        
         setMessages((prevMessages) => [
             ...prevMessages.slice(0, -1),
             ...data.res.map((text) => ({ type: 'bot', text })),
