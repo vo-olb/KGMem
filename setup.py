@@ -81,7 +81,22 @@ def setup_visualizer():
 
         print("🌈 Successfully set up graphrag-visualizer!")
 
+def setup_dotenv():
+    rootdotenv = os.path.join(os.path.dirname(__file__), '.env')
+    if not os.path.exists(rootdotenv):
+        print("❌ .env file not found. Please create one and include API key in it (OPENAI_API_KEY='...')")
+        exit()
+    graphragdotenv = os.path.join(os.path.dirname(__file__), 'graphrag_init/.env')
+    if not os.path.exists(graphragdotenv):
+        # GRAPHRAG_API_KEY = 
+        with open(rootdotenv, 'r') as file:
+            apikey = file.read().split('=')[1].strip()
+        with open(graphragdotenv, 'w') as file:
+            file.write(f"GRAPHRAG_API_KEY={apikey}")
+    print("🌈 Succesfully set up .env files!")
+
 def setup():
     setup_build()
     setup_visualizer()
+    setup_dotenv()
     print("🌈 Setup completed!")

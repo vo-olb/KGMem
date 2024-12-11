@@ -45,7 +45,7 @@ class Memory:
     def create(self) -> None:
         '''Create a folder for the memory, and prepare all necessary files.'''
         os.makedirs(self.rootpath, exist_ok=True)
-        os.system(f'cp -r {os.path.join(MEMORY_DIR, "commons/{*,.env}")} {self.rootpath}')
+        os.system(f'cp -r {os.path.join(os.path.dirname(__file__), "graphrag_init/{*,.env}")} {self.rootpath}')
     
     def delete(self) -> None:
         '''Delete the memory.'''
