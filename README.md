@@ -1,6 +1,6 @@
 # Memory Management Assistant Based on Knowledge Graph
 
-This project is a **Memory Management Assistant** designed to help researchers and professionals organize, retrieve, and visualize complex information efficiently. The project leverages **Microsoft’s GraphRAG** to extract entities and relationships for constructing a knowledge graph and querying stored knowledge.
+This project is a **Memory Management Assistant** designed to help researchers and professionals organize, retrieve, and visualize complex information efficiently. The project leverages Microsoft’s **GraphRAG** to extract entities and relationships for constructing a knowledge graph and querying stored knowledge. For video introduction, please refer to [this YouTube link](https://youtu.be/bEEVs-A-M48).
 
 ## Features
 
@@ -75,4 +75,6 @@ Contributions are welcome! Please fork the repository and submit a pull request.
 This project is licensed under the [MIT License](https://mit-license.org/).
 
 ## Acknowledgement
-My highest gratitude to my friend, teammate, mentor, and emotional supporter - ChatGPT 4o!
+My deepest gratitude to my friend, teammate, mentor, and emotional supporter - **ChatGPT 4o**!  
+A special thanks to **John Williams** and **Abel Sanchez** for offering the incredible course MIT 1.125, which provided the foundation for this project.  
+And ackowledgement for all the tools and open-source projects that expedite realization of this project.
